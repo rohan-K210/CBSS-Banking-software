@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Management</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #2980b9;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .icon-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            background-color: #2980b9;
+            width: 100px;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .icon-button:hover {
+            background-color: #1f6a8c;
+        }
+
+        .icon {
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .icon span {
+            font-size: 24px;
+            color: #2980b9;
+            font-weight: bold;
+        }
+
+        /* Form Styles */
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"]:checked + .form-container {
+            display: block;
+        }
+
+        .form-container h2 {
+            font-size: 18px;
+            border-bottom: 2px solid #2980b9;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-container input,
+        .form-container textarea,
+        .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .form-container button {
+            background-color: #2980b9;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .form-container button:hover {
+            background-color: #1f6a8c;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Customer Management</h1>
+    </header>
+
+    <!-- Icon Buttons -->
+    <div class="icon-container">
+        <label class="icon-button" for="addCustomer">
+            <div class="icon">
+                <span>+</span>
+            </div>
+            <span>Add Customer</span>
+        </label>
+        <label class="icon-button" for="editCustomer">
+            <div class="icon">
+                <span>✎</span>
+            </div>
+            <span>Edit Customer</span>
+        </label>
+        <label class="icon-button" for="deleteCustomer">
+            <div class="icon">
+                <span>✘</span>
+            </div>
+            <span>Delete Customer</span>
+        </label>
+        <!-- Search Customer Icon -->
+        <label class="icon-button" for="searchCustomer">
+            <div class="icon">
+                <span>🔍</span>
+            </div>
+            <span>Search Customer</span>
+        </label>
+    </div>
+
+    <!-- Add Customer Form -->
+    <input type="radio" id="addCustomer" name="form-toggle">
+    <div class="form-container">
+        <h2>Add Customer</h2>
+        <form action="/add_customer" method="POST" id="addCustomerForm">
+            <label for="addFullName">Full Name:</label>
+            <input type="text" name="addFullName" id="addFullName" placeholder="Enter Full Name" required>
+
+            <label for="addGender">Gender:</label>
+            <select name="addGender" id="addGender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+
+            <label for="addAge">Age:</label>
+            <input type="number" name="addAge" id="addAge" placeholder="Enter Age" required>
+
+            <label for="addAddress">Address:</label>
+            <textarea name="addAddress" id="addAddress" placeholder="Enter Address"></textarea>
+
+            <label for="addContactNumber">Contact Number:</label>
+            <input type="tel" name="addContactNumber" id="addContactNumber" placeholder="Enter Contact Number" required>
+
+            <label for="addAnnualIncome">Annual Income:</label>
+            <input type="number" name="addAnnualIncome" id="addAnnualIncome" placeholder="Enter Annual Income" required>
+
+            <label for="addCreditScore">Credit Score:</label>
+            <input type="number" name="addCreditScore" id="addCreditScore" placeholder="Enter Credit Score" required>
+
+            <label for="addDebtToIncomeRatio">Debt-to-Income Ratio:</label>
+            <input type="number" step="0.01" name="addDebtToIncomeRatio" id="addDebtToIncomeRatio" placeholder="Enter Debt-to-Income Ratio" required>
+
+            <label for="addOccupation">Occupation:</label>
+            <input type="text" name="addOccupation" id="addOccupation" placeholder="Enter Occupation" required>
+
+            <label for="addLoanStatus">Loan Status:</label>
+            <select name="addLoanStatus" id="addLoanStatus">
+                <option value="Rejected">Rejected</option>
+                <option value="Approved">Approved</option>
+            </select>
+
+            <label for="addInsuranceStatus">Insurance Status:</label>
+            <select name="addInsuranceStatus" id="addInsuranceStatus">
+                <option value="Insured">Insured</option>
+                <option value="Uninsured">Uninsured</option>
+            </select>
+
+            <label for="addIpAddress">IP Address:</label>
+            <input type="text" name="addIpAddress" id="addIpAddress" placeholder="Enter IP Address">
+
+            <label for="addMacAddress">MAC Address:</label>
+            <input type="text" name="addMacAddress" id="addMacAddress" placeholder="Enter MAC Address">
+
+            <label for="addBankBalance">Bank Balance:</label>
+            <input type="number" step="0.01" name="addBankBalance" id="addBankBalance" placeholder="Enter Bank Balance" required>
+
+            <label for="addPassword">Password:</label>
+            <input type="password" name="addPassword" id="addPassword" placeholder="Enter Password">
+
+            <button type="submit">Add Customer</button>
+        </form>
+    </div>
+
+    <!-- Edit Customer Form -->
+    <input type="radio" id="editCustomer" name="form-toggle">
+    <div class="form-container">
+        <h2>Edit Customer</h2>
+        <form action="/edit_customer" method="POST" id="editCustomerForm">
+            <label for="editId">Customer ID:</label>
+            <input type="number" name="editId" id="editId" placeholder="Enter Customer ID" required>
+
+            <label for="editFullName">Full Name:</label>
+            <input type="text" name="editFullName" id="editFullName" placeholder="Enter Full Name">
+
+            <label for="editGender">Gender:</label>
+            <select name="editGender" id="editGender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+
+            <label for="editAge">Age:</label>
+            <input type="number" name="editAge" id="editAge" placeholder="Enter Age">
+
+            <label for="editAddress">Address:</label>
+            <textarea name="editAddress" id="editAddress" placeholder="Enter Address"></textarea>
+
+            <label for="editContactNumber">Contact Number:</label>
+            <input type="tel" name="editContactNumber" id="editContactNumber" placeholder="Enter Contact Number">
+
+            <label for="editAnnualIncome">Annual Income:</label>
+            <input type="number" name="editAnnualIncome" id="editAnnualIncome" placeholder="Enter Annual Income">
+
+            <label for="editCreditScore">Credit Score:</label>
+            <input type="number" name="editCreditScore" id="editCreditScore" placeholder="Enter Credit Score">
+
+            <label for="editDebtToIncomeRatio">Debt-to-Income Ratio:</label>
+            <input type="number" step="0.01" name="editDebtToIncomeRatio" id="editDebtToIncomeRatio" placeholder="Enter Debt-to-Income Ratio">
+
+            <label for="editOccupation">Occupation:</label>
+            <input type="text" name="editOccupation" id="editOccupation" placeholder="Enter Occupation">
+
+            <label for="editLoanStatus">Loan Status:</label>
+            <select name="editLoanStatus" id="editLoanStatus">
+                <option value="Rejected">Rejected</option>
+                <option value="Approved">Approved</option>
+            </select>
+
+            <label for="editInsuranceStatus">Insurance Status:</label>
+            <select name="editInsuranceStatus" id="editInsuranceStatus">
+                <option value="Insured">Insured</option>
+                <option value="Uninsured">Uninsured</option>
+            </select>
+
+            <label for="editIpAddress">IP Address:</label>
+            <input type="text" name="editIpAddress" id="editIpAddress" placeholder="Enter IP Address">
+
+            <label for="editMacAddress">MAC Address:</label>
+            <input type="text" name="editMacAddress" id="editMacAddress" placeholder="Enter MAC Address">
+
+            <label for="editBankBalance">Bank Balance:</label>
+            <input type="number" step="0.01" name="editBankBalance" id="editBankBalance" placeholder="Enter Bank Balance">
+
+            <label for="editPassword">Password:</label>
+            <input type="password" name="editPassword" id="editPassword" placeholder="Enter Password">
+
+            <button type="submit">Edit Customer</button>
+        </form>
+    </div>
+
+    <!-- Delete Customer Form -->
+    <input type="radio" id="deleteCustomer" name="form-toggle">
+    <div class="form-container">
+        <h2>Delete Customer</h2>
+        <form action="/delete_customer" method="POST" id="deleteCustomerForm">
+            <label for="deleteCustomerID">Customer ID:</label>
+            <input type="number" name="deleteCustomerID" id="deleteCustomerID" placeholder="Enter Customer ID" required>
+
+            <button type="submit">Delete Customer</button>
+        </form>
+    </div>
+
+    <!-- Search Customer Form -->
+    <input type="radio" id="searchCustomer" name="form-toggle">
+    <div class="form-container">
+        <h2>Search Customer</h2>
+        <form action="/search_customer" method="POST" id="searchCustomerForm">
+            <label for="searchCustomerID">Customer ID:</label>
+            <input type="number" name="searchCustomerID" id="searchCustomerID" placeholder="Enter Customer ID" required>
+
+            <button type="submit">Search Customer</button>
+        </form>
+    </div>
+    
+    <div class="results-container">
+        <h2>Result</h2>
+        <div class="results">{{ results }}</div>
+    </div>
+</div>
+</body>
+</html>

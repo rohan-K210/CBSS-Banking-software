@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackers' Attack Dashboard</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: red;
+            margin-top: 50px;
+            font-size: 40px;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .dummy-btn, .attack-btn {
+            background-color: #ff0000; /* Red neon for dummy buttons */
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            margin: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+            border-radius: 5px;
+        }
+
+        .attack-btn {
+            background-color: #00ffff; /* Blue neon for the functional button */
+        }
+
+        .form-container {
+            margin-top: 20px;
+            display: none;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        input {
+            margin: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .status {
+            margin-top: 20px;
+            font-size: 24px;
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Welcome to the Hacker Dashboard</h1>
+<p>The status of your attack will be displayed below.</p>
+
+<div class="container">
+    <button class="dummy-btn">Dummy Transaction</button>
+    <button class="attack-btn" onclick="showForm()">Initiate Attack</button>
+
+    <div class="form-container" id="form-container">
+        <h2>Enter Amount for the Attack</h2>
+        <form action="/hacker" method="post">
+            <input type="number" name="amount" placeholder="Amount" required>
+            <button type="submit">Launch Attack</button>
+        </form>
+    </div>
+
+    <div class="status">
+        {% if status %}
+            <p>Status: {{ status }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    function showForm() {
+        document.getElementById('form-container').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>

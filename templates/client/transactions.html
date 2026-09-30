@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2980b9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        button {
+            background-color: #2980b9;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #1f6a8c;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Transaction History</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Transaction ID</th>
+            <th>Receiver ID</th>
+            <th>Amount</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for trans in transactions %}
+        <tr>
+            <td>{{ trans[0] }}</td>
+            <td>{{ trans[1] }}</td>
+            <td>{{ trans[2] }}</td>
+            <td>{{ trans[3] }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4">No transactions found for this client.</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <a href="/client">
+        <button>Back to Dashboard</button>
+    </a>
+</div>
+
+</body>
+</html>

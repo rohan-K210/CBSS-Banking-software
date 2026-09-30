@@ -1,0 +1,49 @@
+import dash
+import dash_table
+import pandas as pd
+import mysql.connector
+from dash import html
+from dash.dependencies import Input, Output
+
+# Initialize Dash app
+app = dash.Dash(__name__)
+
+# Function to fetch employee data from MySQL database
+def get_employee_data():
+    # Connect to the MySQL database
+    conn = mysql.connector.connect(
+        host="your_mysql_host",     # e.g., "localhost"
+        user="your_mysql_user",     # your MySQL username
+        password="your_mysql_password", # your MySQL password
+        database="your_database"    # your MySQL database name
+    )
+    
+    query = "SELECT * FROM employees"  # Adjust query if needed
+    df = pd.read_sql(query, conn)  # Use pandas to fetch data from MySQL
+    conn.close()
+    return df
+
+# Layout of the app
+app.layout = html.Div([
+    html.H1("Employee Data Table"),
+    dash_table.DataTable(
+        id='employee-table',
+        columns=[
+            {'name': 'Employee ID', 'id': 'employee_id'},
+            {'name': 'First Name', 'id': 'first_name'},
+            {'name': 'Last Name', 'id': 'last_name'},
+            {'name': 'Email', 'id': 'email'},
+            {'name': 'Phone Number', 'id': 'phone_number'},
+            {'name': 'Hire Date', 'id': 'hire_date'},
+            {'name': 'Job Title', 'id': 'job_title'},
+            {'name': 'Department', 'id': 'department'},
+            {'name': 'Salary', 'id': 'salary'}
+        ],
+        data=get_employee_data().to_dict('records'),
+        style_table={'height': '400px', 'overflowY': 'auto'}
+    )
+])
+
+# Run the server
+if __name__ == '__main__':
+    app.run_server(debug=True)

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Valuation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 28px;
+            border-bottom: 2px solid #2980b9;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .form-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #2980b9;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #1f6a8c;
+        }
+        .result-container {
+            background-color: #e8f0fe;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        #valuationResults {
+            font-weight: bold;
+            font-size: 24px;
+            text-align: center;
+        }
+        .result-approved { color: #27ae60; }
+        .result-rejected { color: #e74c3c; }
+        .result-error { color: #e67e22; }
+        .factors {
+            margin-top: 15px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 6px;
+        }
+        .factors h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #555;
+        }
+        .factors ul {
+            list-style: none;
+            padding: 0;
+        }
+        .factors li {
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        .factors li:last-child { border-bottom: none; }
+        .factors li::before {
+            content: "\\2022";
+            color: #2980b9;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Loan Valuation</h1>
+
+    <div class="form-container">
+        <h2>Enter Customer ID</h2>
+        <form id="loanValuationForm" method="POST" action="/loan-valuation">
+            <label for="customerId">Customer ID:</label>
+            <input type="number" id="customerId" name="customerId" placeholder="Enter Customer ID" required>
+            <button type="submit">Get Loan Evaluation</button>
+        </form>
+    </div>
+
+    <div class="result-container" id="resultContainer">
+        <h2>Loan Evaluation Result</h2>
+        {% if result %}
+            <p id="valuationResults" class="result-{{ result.result|lower }}">{{ result.result }}{% if result.confidence %} <span style="font-size:16px;color:#666">({{ result.confidence }}% confidence)</span>{% endif %}</p>
+            {% if result.factors %}
+            <div class="factors">
+                <h3>Key Factors</h3>
+                <ul>
+                {% for factor in result.factors %}
+                    <li>{{ factor }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        {% else %}
+            <p id="valuationResults" style="color: #999;">Your loan approval result will appear here.</p>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>

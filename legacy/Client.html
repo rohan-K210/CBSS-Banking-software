@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            padding: 20px;
+            color: #ecf0f1;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul li a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
+            padding: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: #34495e;
+            border-radius: 5px;
+        }
+
+        /* Main Content Styles */
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            border-bottom: 2px solid #2980b9;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Transaction Form Styles */
+        form {
+            margin-top: 20px;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            margin-right: 10px;
+            width: 200px;
+        }
+
+        button {
+            background-color: #2980b9;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1f6a8c;
+        }
+
+        /* Transaction Table Styles */
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .transaction-table th, .transaction-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .transaction-table th {
+            background-color: #2980b9;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <ul>
+            <li><a href="#home" class="active" onclick="showSection('home')">Home</a></li>
+            <li><a href="#transactions" onclick="showSection('transactions')">Transactions</a></li>
+            <li><a href="#fraud" onclick="showSection('fraud')">Fraud Alerts</a></li>
+            <li><a href="#settings" onclick="showSection('settings')">Account Settings</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Home Section -->
+        <section id="home">
+            <h1>Home</h1>
+            <p>Welcome to your dashboard! Here you can view recent transactions, manage your account, and more.</p>
+        </section>
+
+        <!-- Transactions Section -->
+        <section id="transactions" class="hidden">
+            <h1>Transaction History</h1>
+
+            <!-- Transaction Table -->
+            <table class="transaction-table">
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.date }}</td>
+                    <td>{{ transaction.amount }}</td>
+                    <td>{{ transaction.status }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <h2>Make a New Transaction</h2>
+            <form action="/make_transaction" method="POST">
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" name="amount" required>
+                <button type="submit">Submit Transaction</button>
+            </form>
+        </section>
+
+        <!-- Fraud Alerts Section -->
+        <section id="fraud" class="hidden">
+            <h1>Fraud Alerts</h1>
+            <p>No suspicious activity detected.</p>
+        </section>
+
+        <!-- Account Settings Section -->
+        <section id="settings" class="hidden">
+            <h1>Account Settings</h1>
+            <form action="/update-settings" method="POST">
+                <label for="email">Update Email:</label>
+                <input type="email" id="email" name="email">
+                
+                <label for="password">Change Password:</label>
+                <input type="password" id="password" name="password">
+                
+                <button type="submit">Update</button>
+            </form>
+        </section>
+    </div>
+</div>
+
+<script>
+    // JavaScript for Sidebar Navigation
+    function showSection(section) {
+        // Hide all sections
+        document.querySelectorAll('.content section').forEach((sec) => {
+            sec.classList.add('hidden');
+        });
+
+        // Remove active class from all sidebar links
+        document.querySelectorAll('.sidebar ul li a').forEach((link) => {
+            link.classList.remove('active');
+        });
+
+        // Show selected section and set active class
+        document.getElementById(section).classList.remove('hidden');
+        document.querySelector(`.sidebar ul li a[href="#${section}"]`).classList.add('active');
+    }
+</script>
+
+</body>
+</html>

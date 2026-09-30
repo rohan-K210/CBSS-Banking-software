@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+eggs/
+*.egg
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env.local
+
+# Environment variables (contains secrets!)
+.env
+.env.local
+.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite3
+dump.rdb
+
+# ML model artifacts
+*.pkl
+*.joblib
+*.h5
+*.model
+
+# Byte-compiled
+*.pyc
+*.pyo
+
+# Distribution
+*.tar.gz
+*.zip
+
+# Test
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Temp files
+tmp/
+temp/

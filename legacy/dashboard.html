@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        /* CSS Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            display: flex;
+            background-color: #121212; /* Dark background */
+            color: #E5E5E5;
+        }
+
+        .header {
+            background-color: #1F2833; /* Darker blue */
+            color: #66FCF1; /* Neon blue */
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .header-icons {
+            /* Placeholder for icons */
+        }
+
+        .sidebar {
+            background-color: #0B0C10;
+            color: #66FCF1;
+            width: 200px;
+            height: 100vh;
+            padding-top: 4rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+
+        .sidebar li {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .sidebar li.active, .sidebar li:hover {
+            background-color: #45A29E;
+            color: #0B0C10;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            margin-left: 200px;
+            padding: 6rem 2rem 2rem 2rem;
+            background-color: #121212;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .card {
+            background-color: #1F2833;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.3); /* Neon blue shadow */
+            color: #C5C6C7;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.6);
+        }
+
+        .card.teal {
+            border-left: 5px solid #45A29E;
+        }
+
+        .chart-card {
+            grid-column: span 2;
+        }
+
+        .transactions-card {
+            grid-column: span 2;
+        }
+
+        .footer {
+            background-color: #0B0C10;
+            color: #66FCF1;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            left: 200px;
+            width: calc(100% - 200px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        table, th, td {
+            border: 1px solid #C5C6C7;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #0B0C10;
+            color: #66FCF1;
+        }
+    </style>
+    <!-- Include Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="header">
+        <h1>Admin Dashboard</h1>
+        <div class="header-icons">
+            <!-- Icons for Notifications, Profile, etc. -->
+        </div>
+    </header>
+
+    <nav class="sidebar">
+        <ul>
+            <li class="active">Overview</li>
+            <li>Transactions</li>
+            <li>Fraud Detection</li>
+            <li>Customer Management</li>
+            <li>Loan Evaluation</li>
+            <li>Employee Management</li>
+            <li>Settings</li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <!-- Graph Section -->
+        <div class="card chart-card">
+            <h2>Bank's Progress</h2>
+            <canvas id="progressChart"></canvas>
+        </div>
+        <div class="card chart-card">
+            <h2>Profit and Loss</h2>
+            <canvas id="profitLossChart"></canvas>
+        </div>
+
+        <!-- Important Transactions Section -->
+        <div class="card transactions-card">
+            <h2>Important Transactions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Account Holder</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>TX12345</td>
+                        <td>Rohan Sharma</td>
+                        <td>$5,000</td>
+                        <td>Completed</td>
+                    </tr>
+                    <tr>
+                        <td>TX12346</td>
+                        <td>Anita Verma</td>
+                        <td>$2,500</td>
+                        <td>Pending</td>
+                    </tr>
+                    <tr>
+                        <td>TX12347</td>
+                        <td>Rahul Singh</td>
+                        <td>$10,000</td>
+                        <td>Failed</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2024 Bank Admin Dashboard</p>
+    </footer>
+
+    <!-- JavaScript for Chart.js -->
+    <script>
+        // Progress Chart
+        const progressCtx = document.getElementById('progressChart').getContext('2d');
+        const progressChart = new Chart(progressCtx, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                datasets: [{
+                    label: 'Total Customers',
+                    data: [500, 700, 1200, 1500, 1800, 2000],
+                    borderColor: '#66FCF1',
+                    backgroundColor: 'rgba(102, 252, 241, 0.2)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        // Profit and Loss Chart
+        const profitLossCtx = document.getElementById('profitLossChart').getContext('2d');
+        const profitLossChart = new Chart(profitLossCtx, {
+            type: 'bar',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                datasets: [
+                    {
+                        label: 'Profit',
+                        data: [20000, 25000, 30000, 35000, 40000, 45000],
+                        backgroundColor: '#66FCF1'
+                    },
+                    {
+                        label: 'Loss',
+                        data: [5000, 4000, 3000, 2000, 1000, 1500],
+                        backgroundColor: '#800020'
+                    }
+                ]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
+</body>
+</html>

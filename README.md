@@ -6,6 +6,11 @@ The project is built with Flask and MySQL, with selected machine-learning workfl
 
 > **Security notice:** CBSS is a demonstration project, not production banking software. Do not use it to process real financial transactions or store real customer data. Demo credentials, authentication flows, and security controls must not be treated as production-ready.
 
+## Project preview
+
+Screenshots of the customer interface, loan-evaluation workflow, and fraud
+detection demonstration will be added after clean captures are prepared.
+
 ## Features
 
 - **Customer management:** View, add, edit, search, and manage customer records.

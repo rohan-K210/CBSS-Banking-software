@@ -19,12 +19,23 @@ class TestAdminApp:
         with app.test_client() as c:
             yield c
 
-    def test_root_route(self, client):
+    def test_root_redirects_to_login(self, client):
         resp = client.get("/")
-        assert resp.status_code == 200
+        assert resp.status_code == 302
+        assert resp.headers["Location"].endswith("/login")
 
-    def test_admin_route(self, client):
+    def test_admin_route_requires_login(self, client):
         resp = client.get("/admin")
+        assert resp.status_code == 302
+        assert resp.headers["Location"].endswith("/login")
+
+    def test_admin_api_requires_login(self, client):
+        resp = client.get("/api/customers")
+        assert resp.status_code == 401
+        assert resp.get_json()["error"]["code"] == "AUTHENTICATION_REQUIRED"
+
+    def test_admin_login_page_is_public(self, client):
+        resp = client.get("/login")
         assert resp.status_code == 200
 
     def test_health(self, client):
@@ -34,21 +45,17 @@ class TestAdminApp:
         assert data["status"] == "healthy"
         assert data["service"] == "admin"
 
-    def test_cust_route(self, client):
-        resp = client.get("/cust")
-        assert resp.status_code == 200
+    def test_customer_management_requires_login(self, client):
+        assert client.get("/cust").status_code == 302
 
-    def test_emp_route(self, client):
-        resp = client.get("/emp")
-        assert resp.status_code == 200
+    def test_employee_management_requires_login(self, client):
+        assert client.get("/emp").status_code == 302
 
-    def test_loan_valuation_get(self, client):
-        resp = client.get("/loan-valuation")
-        assert resp.status_code == 200
+    def test_loan_valuation_requires_login(self, client):
+        assert client.get("/loan-valuation").status_code == 302
 
-    def test_segm_get(self, client):
-        resp = client.get("/segm")
-        assert resp.status_code == 200
+    def test_segmentation_requires_login(self, client):
+        assert client.get("/segm").status_code == 302
 
 
 # ---------------------------------------------------------------------------

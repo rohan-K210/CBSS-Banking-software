@@ -15,6 +15,7 @@ The project is built with Flask and MySQL, with selected machine-learning workfl
 - **Customer segmentation:** KMeans clustering to group customers.
 - **Fraud detection:** Model-assisted transaction review using sample transaction data.
 - **Attack simulation:** A separate demonstration interface for exploring suspicious or simulated activity.
+- **Admin authentication:** Environment-configured admin login, hashed password verification, session expiry, and protected dashboard/API routes.
 - **Service management:** Scripts to start, stop, and check the health of the Flask applications.
 - **Testing:** Unit and integration test suites.
 
@@ -163,7 +164,13 @@ Copy-Item .env.example .env
 cp .env.example .env
 ```
 
-Edit `.env` and set your local database credentials and a unique random `SECRET_KEY`. Keep the real `.env` file private; it is excluded from version control. Never commit passwords, API keys, or production secrets.
+Edit `.env` and set your local database credentials and a unique random `SECRET_KEY`. Configure `ADMIN_USERNAME` and `ADMIN_PASSWORD_HASH` for the admin dashboard. Generate a password hash with:
+
+```bash
+python -c "from werkzeug.security import generate_password_hash; print(generate_password_hash('choose-a-strong-password'))"
+```
+
+Copy the generated hash into `ADMIN_PASSWORD_HASH`; do not store the raw admin password in `.env`. Keep the real `.env` file private; it is excluded from version control. Never commit passwords, API keys, or production secrets.
 
 ### 6. Seed sample data
 
@@ -186,9 +193,9 @@ The repository's sample setup documents the following demonstration access:
 | Portal | Demo access |
 |---|---|
 | Client Portal | Customer IDs 1–5; sample password: `password123` |
-| Admin Dashboard | No login required in the current demo flow |
+| Admin Dashboard | Configure `ADMIN_USERNAME` and `ADMIN_PASSWORD_HASH` in `.env` |
 
-These values are public test credentials, not secure account credentials. Do not reuse them for any real account. The admin interface's lack of a login requirement is a known limitation and must be addressed before any deployment beyond a local demonstration.
+These values are public test credentials, not secure account credentials. Do not reuse them for any real account. The admin dashboard now requires an environment-configured login. Customer password storage is still a legacy plaintext implementation and must be migrated to password hashes before any deployment beyond a local demonstration.
 
 ## Useful Commands
 
@@ -222,6 +229,9 @@ The `.env.example` file documents the available settings:
 | `DB_USER`, `DB_PASSWORD`, `DB_NAME` | Database connection |
 | `DB_POOL_SIZE` | Database connection pool size |
 | `SECRET_KEY` | Flask session signing key |
+| `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH` | Admin dashboard credentials (password hash, not plaintext) |
+| `SESSION_COOKIE_SECURE` | Secure-only session cookies; enable for HTTPS deployments |
+| `SESSION_LIFETIME_MINUTES` | Admin session lifetime |
 | `DEBUG`, `LOG_LEVEL` | Debugging and logging configuration |
 | `ADMIN_PORT`, `CLIENT_PORT` | Admin and client application ports |
 | `HACKER_PORT`, `FRAUD_DETECTOR_PORT` | Simulator and fraud application ports |
@@ -241,9 +251,9 @@ The tests are organised into unit and integration test groups.
 
 ## Limitations and Future Work
 
-- Add authentication and role-based access control to every administrative and service interface.
-- Replace demonstration credentials with secure password hashing and account-management flows.
-- Add stronger request validation, CSRF protection, and security-focused tests.
+- Migrate customer passwords from plaintext to secure password hashes and update existing demo records.
+- Add CSRF protection and stronger request validation to all state-changing forms and APIs.
+- Add role-based access control and authentication to the remaining demonstration services.
 - Improve model evaluation with documented datasets, metrics, and validation procedures.
 - Remove generated Python bytecode and other build artefacts from version control.
 - Expand automated tests for transaction, fraud-review, and model workflows.

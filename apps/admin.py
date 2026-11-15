@@ -21,7 +21,9 @@ Routes:
 """
 
 import logging
-from flask import Flask, render_template, request, redirect, url_for
+import os
+from flask import Flask, jsonify, render_template, request, redirect, session, url_for
+from werkzeug.security import check_password_hash
 
 from shared.config import get_settings
 from shared.database import get_cursor, get_connection
@@ -39,12 +41,55 @@ def create_admin_app() -> Flask:
 
     # Static files served automatically by Flask from static/
 
+    # Admin credentials are configured as environment variables. The app
+    # deliberately fails closed when no password hash is configured.
+    admin_username = os.environ.get("ADMIN_USERNAME", "").strip()
+    admin_password_hash = os.environ.get("ADMIN_PASSWORD_HASH", "").strip()
+
+    @app.before_request
+    def require_admin_login():
+        if request.endpoint in {"admin_login", "health", "static"}:
+            return None
+        if session.get("admin_authenticated") is True:
+            return None
+        if request.path.startswith("/api/"):
+            return jsonify({
+                "success": False,
+                "error": {"code": "AUTHENTICATION_REQUIRED", "message": "Admin login required"},
+            }), 401
+        return redirect(url_for("admin_login"))
+
     # -----------------------------------------------------------------------
     # Root & Login
     # -----------------------------------------------------------------------
-    @app.route("/")
+    @app.route("/", methods=["GET"])
     def index():
-        return render_template("admin/root.html")
+        return redirect(url_for("admin_login"))
+
+    @app.route("/login", methods=["GET", "POST"])
+    def admin_login():
+        if request.method == "POST":
+            username = request.form.get("username", "").strip()
+            password = request.form.get("password", "")
+            if not admin_username or not admin_password_hash:
+                return render_template(
+                    "admin/login.html",
+                    error="Admin login is not configured. Set ADMIN_USERNAME and ADMIN_PASSWORD_HASH.",
+                ), 503
+            if username == admin_username and check_password_hash(admin_password_hash, password):
+                session.clear()
+                session["admin_authenticated"] = True
+                session["admin_username"] = username
+                return redirect(url_for("client_dashboard"))
+            return render_template("admin/login.html", error="Invalid username or password."), 401
+        if session.get("admin_authenticated") is True:
+            return redirect(url_for("client_dashboard"))
+        return render_template("admin/login.html", error=None)
+
+    @app.route("/logout", methods=["POST"])
+    def admin_logout():
+        session.clear()
+        return redirect(url_for("admin_login"))
 
     @app.route("/admin")
     def client_dashboard():

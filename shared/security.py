@@ -18,6 +18,7 @@ from shared.config import AppConfig, get_settings
 from shared.exceptions import (
     CBSSBaseException,
     AuthenticationError,
+    AuthorizationError,
     ConfigurationError,
     DatabaseError,
     NotFoundError,

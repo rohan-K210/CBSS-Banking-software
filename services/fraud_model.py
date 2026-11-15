@@ -113,7 +113,7 @@ def predict_fraud(
 
         transaction_data = transaction_data[feature_names]
         prediction = model.predict(transaction_data)[0]
-        result = "success" if prediction == 1 else "blocked"
+        result = "blocked" if prediction == 1 else "success"
 
         logger.info(
             "Fraud prediction: sender=%s receiver=%s amount=%.2f result=%s",

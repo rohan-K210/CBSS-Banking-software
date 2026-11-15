@@ -78,6 +78,7 @@ def create_admin_app() -> Flask:
                 ), 503
             if username == admin_username and check_password_hash(admin_password_hash, password):
                 session.clear()
+                session.permanent = True
                 session["admin_authenticated"] = True
                 session["admin_username"] = username
                 return redirect(url_for("client_dashboard"))

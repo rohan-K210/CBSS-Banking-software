@@ -163,7 +163,7 @@ Edit `.env` and set your local database credentials and a unique random `SECRET_
 python -c "from werkzeug.security import generate_password_hash; print(generate_password_hash('choose-a-strong-password'))"
 ```
 
-Copy the generated hash into `ADMIN_PASSWORD_HASH`; do not store the raw admin password in `.env`. Keep the real `.env` file private; it is excluded from version control. Never commit passwords, API keys, or production secrets.
+Copy the generated hash into `ADMIN_PASSWORD_HASH`; do not store the raw admin password in `.env`. For local HTTP development, keep `SESSION_COOKIE_SECURE=false`; set it to `true` when deploying behind HTTPS. Keep the real `.env` file private; it is excluded from version control. Never commit passwords, API keys, or production secrets.
 
 ### 6. Seed sample data
 

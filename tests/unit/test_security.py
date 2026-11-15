@@ -68,3 +68,12 @@ class TestRequireSession:
             resp = client.get("/protected")
             # No session → should redirect (302) to login
             assert resp.status_code == 302
+
+
+class TestExceptionStatusCodes:
+    def test_authorization_error_maps_to_forbidden(self):
+        from shared.exceptions import AuthorizationError
+        from shared.security import _get_status_code
+
+        error = AuthorizationError("Not allowed")
+        assert _get_status_code(error) == 403

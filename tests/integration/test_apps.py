@@ -16,6 +16,7 @@ class TestAdminApp:
         from apps.admin import create_admin_app
         app = create_admin_app()
         app.config["TESTING"] = True
+        app.config["SESSION_COOKIE_SECURE"] = False
         with app.test_client() as c:
             yield c
 
@@ -46,6 +47,7 @@ class TestAdminApp:
         monkeypatch.setenv("ADMIN_PASSWORD_HASH", generate_password_hash("ci-test-password"))
         app = create_admin_app()
         app.config["TESTING"] = True
+        app.config["SESSION_COOKIE_SECURE"] = False
 
         with app.test_client() as admin_client:
             response = admin_client.post(

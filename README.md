@@ -52,7 +52,6 @@ CBSS-Banking-software/
 │   ├── unit/
 │   └── integration/
 ├── data/
-│   ├── schema.sql        # MySQL schema
 │   └── demo_transactions.csv
 ├── legacy/               # Earlier project implementation
 ├── .env.example          # Safe configuration template
@@ -138,15 +137,9 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 4. Create the database
+### 4. Prepare the database
 
-Create a MySQL database using the provided schema:
-
-```bash
-mysql -u root -p < data/schema.sql
-```
-
-Make sure the MySQL server is running and that the database user has the required permissions.
+Create a MySQL database named `cbss` and configure a MySQL user with the required permissions. **A complete SQL schema file is not currently included in this repository**, so the tables and columns expected by the applications must be created separately before seeding or starting the database-backed workflows. This is a known setup gap.
 
 ### 5. Configure environment variables
 
@@ -255,7 +248,7 @@ The tests are organised into unit and integration test groups.
 - Add CSRF protection and stronger request validation to all state-changing forms and APIs.
 - Add role-based access control and authentication to the remaining demonstration services.
 - Improve model evaluation with documented datasets, metrics, and validation procedures.
-- Remove generated Python bytecode and other build artefacts from version control.
+- Add and maintain a versioned MySQL schema or migration system; the current repository does not include a complete schema file.
 - Expand automated tests for transaction, fraud-review, and model workflows.
 
 ---

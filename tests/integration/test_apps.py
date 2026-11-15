@@ -38,6 +38,40 @@ class TestAdminApp:
         resp = client.get("/login")
         assert resp.status_code == 200
 
+    def test_admin_login_authenticates_and_opens_dashboard(self, monkeypatch):
+        from werkzeug.security import generate_password_hash
+        from apps.admin import create_admin_app
+
+        monkeypatch.setenv("ADMIN_USERNAME", "ci-admin")
+        monkeypatch.setenv("ADMIN_PASSWORD_HASH", generate_password_hash("ci-test-password"))
+        app = create_admin_app()
+        app.config["TESTING"] = True
+
+        with app.test_client() as admin_client:
+            response = admin_client.post(
+                "/login",
+                data={"username": "ci-admin", "password": "ci-test-password"},
+            )
+            assert response.status_code == 302
+            assert admin_client.get("/admin").status_code == 200
+
+    def test_admin_login_rejects_invalid_password(self, monkeypatch):
+        from werkzeug.security import generate_password_hash
+        from apps.admin import create_admin_app
+
+        monkeypatch.setenv("ADMIN_USERNAME", "ci-admin")
+        monkeypatch.setenv("ADMIN_PASSWORD_HASH", generate_password_hash("correct-password"))
+        app = create_admin_app()
+        app.config["TESTING"] = True
+
+        with app.test_client() as admin_client:
+            response = admin_client.post(
+                "/login",
+                data={"username": "ci-admin", "password": "wrong-password"},
+            )
+            assert response.status_code == 401
+            assert admin_client.get("/admin").status_code == 302
+
     def test_health(self, client):
         resp = client.get("/health")
         assert resp.status_code == 200

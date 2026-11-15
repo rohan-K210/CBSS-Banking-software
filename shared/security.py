@@ -8,7 +8,9 @@ Provides:
 """
 
 import logging
+import os
 import traceback
+from datetime import timedelta
 from functools import wraps
 from typing import Any, Callable
 
@@ -64,6 +66,13 @@ def create_app(
     app.config["DEBUG"] = settings.debug
     app.config["SESSION_COOKIE_HTTPONLY"] = True
     app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+    secure_cookie = os.environ.get(
+        "SESSION_COOKIE_SECURE", "false" if settings.debug else "true"
+    ).lower() in {"1", "true", "yes"}
+    app.config["SESSION_COOKIE_SECURE"] = secure_cookie
+    app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(
+        minutes=int(os.environ.get("SESSION_LIFETIME_MINUTES", "30"))
+    )
 
     # Setup logging for this service
     setup_logging(config.name, level=settings.log_level)
